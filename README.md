@@ -39,10 +39,10 @@ A full-stack blogging platform inspired by **Medium**, where users can write, re
    git clone https://github.com/yourusername/medium-clone.git
    cd medium-clone
    ```
-2. **Install dependencies**
- ```bash
+2. **Install dependencies**  
+   ```bash
    npm install
- ```
+   ```
 3. **Configure environment variables in .env**  
    ```bash
    DATABASE_URL=your_database_url  
