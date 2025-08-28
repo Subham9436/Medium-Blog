@@ -2,10 +2,13 @@ import { UserCreationRequest, UserValidator } from "@/app/backcomponents/types";
 import { PrismaClient } from "../../../../generated/prisma";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
+import { SignJWT } from "@/app/backcomponents/jwt";
+import type { Response } from "express";
 
 const prisma = new PrismaClient();
-export async function POST(req: Request) {
-  const { email, fname, lname, password }:UserCreationRequest = await req.json();
+export async function POST(req: Request, res: Response) {
+  const { email, fname, lname, password }: UserCreationRequest =
+    await req.json();
   const payload = { email, fname, lname, password };
   const parsedPayload = UserValidator.safeParse(payload);
   console.log(parsedPayload);
@@ -23,6 +26,16 @@ export async function POST(req: Request) {
       password: hashedPassword,
     },
   });
+  const token = SignJWT(newUser.email, newUser.id, res); // Implement JWT token generation if needed
 
-  return NextResponse.json({msg: "User created successfully", userId: newUser.id} );
+  return NextResponse.json({
+    msg: "User created successfully",
+    user: {
+      id: newUser.id,
+      email: newUser.email,
+      fname: newUser.fname,
+      lname: newUser.lname,
+    },
+    token: token,
+  });
 }

@@ -1,11 +1,14 @@
-import { NavbarLand } from "./components/navbar"
+import { FooterHero } from "./components/footerhero";
+import { Hero } from "./components/hero";
+import { NavbarLand } from "./components/navbarLand"
 
 
 export default function Home() {
   return (
     <div>
       <NavbarLand/>
-      <p>This project is built with Next.js.</p>
+      <Hero/>
+      <FooterHero/>
     </div>
   );
 }
