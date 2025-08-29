@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import { SignJWT } from "@/app/backcomponents/jwt";
 import type { Response } from "express";
+import { cookies } from "next/headers";
 
 const prisma = new PrismaClient();
 export async function POST(req: Request, res: Response) {
@@ -11,7 +12,6 @@ export async function POST(req: Request, res: Response) {
     await req.json();
   const payload = { email, fname, lname, password };
   const parsedPayload = UserValidator.safeParse(payload);
-  console.log(parsedPayload);
   if (!parsedPayload.success) {
     return new Response("Invalid data", { status: 400 });
   }
@@ -26,7 +26,14 @@ export async function POST(req: Request, res: Response) {
       password: hashedPassword,
     },
   });
-  const token = SignJWT(newUser.email, newUser.id, res); // Implement JWT token generation if needed
+  const token = SignJWT(newUser.email, newUser.id); // Implement JWT token generation if needed
+  // set cookie in Next.js
+  (await cookies()).set("Bearer", token, {
+    httpOnly: true,
+    sameSite: "strict",
+    maxAge: 3600, // in seconds
+    path: "/",
+  });
 
   return NextResponse.json({
     msg: "User created successfully",
@@ -36,6 +43,6 @@ export async function POST(req: Request, res: Response) {
       fname: newUser.fname,
       lname: newUser.lname,
     },
-    token: token,
+     token,
   });
 }
