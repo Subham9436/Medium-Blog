@@ -15,7 +15,7 @@ interface RangerModelProps {
 }
 
 export default function BaymaxModel({
-  url = "/chibi_baymax.glb", // <-- place your GLB in public/models
+  url = "/chibi_baymax.compressed.glb", // <-- place your GLB in public/models
   scale = 36,
   position = [0, -2.5, 0],
 }: RangerModelProps) {
