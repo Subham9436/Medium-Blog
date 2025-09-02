@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { MyJwtPayload } from "./jwtpayload";
 
 const secret: string = process.env.JWT_SECRET || "";
 
@@ -22,10 +23,13 @@ export function VerifyJWT(token: string) {
   }
 }
 
-export function DecodeJWT(token: string) {
+export function DecodeJWT(token: string): MyJwtPayload | null {
   try {
     const decoded = jwt.decode(token);
-    return decoded || null;
+    if (!decoded || typeof decoded === "string") {
+      return null;
+    }
+    return decoded as MyJwtPayload;
   } catch {
     return null;
   }
